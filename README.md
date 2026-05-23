@@ -1,17 +1,31 @@
-# Amazon Orders Data Analysis
+# How Much Have You Spent on Amazon?
 
-A beginner-friendly Python data analysis project that analyzes Amazon order history using Pandas and Matplotlib.
+A Python data analysis project that analyzes Amazon order history and calculates how much money has been spent on Amazon purchases over time.
+
+This project uses Pandas and Matplotlib to clean, process, analyze, and visualize Amazon order data.
+
+---
 
 ## Features
 
-- Data cleaning and preprocessing
-- Currency conversion handling
-- Missing value handling
-- Daily spending analysis
-- Data visualization using Matplotlib
+- Calculate total money spent on Amazon
+- Find average order value
+- Detect highest and lowest order amounts
+- Calculate median order value
+- Analyze total tax paid
+- Calculate effective tax rate
+- Visualize daily spending habits using graphs
+
+---
 
 ## Technologies Used
 
 - Python
 - Pandas
 - Matplotlib
+
+---
+
+## Dataset
+
+The dataset used is Amazon Order History exported from Amazon.
