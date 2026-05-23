@@ -1,0 +1,38 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('amazonorders.csv')
+
+# Fill missing values
+df.fillna({"Purchase Order Number": 0}, inplace=True)
+df.fillna({"Group Name": "Unknown"}, inplace=True)
+
+# Convert date column
+df['Order Date'] = pd.to_datetime(df['Order Date'], format='mixed')
+
+# Clean currency columns
+df["Total Charged"] = df["Total Charged"].str.replace('$', '', regex=False).astype(float)
+df["Tax Charged"] = df["Tax Charged"].str.replace('$', '', regex=False).astype(float)
+df["Subtotal"] = df["Subtotal"].str.replace('$', '', regex=False).astype(float)
+
+# Analysis
+print("Average Spending :", df["Total Charged"].mean())
+
+summ = df["Tax Charged"].sum()
+print("Total Tax Paid :", summ)
+
+# Group daily orders
+daily_orders = df.groupby('Order Date')["Total Charged"].sum()
+
+# Plot
+plt.figure(figsize=(10,5))
+
+daily_orders.plot(kind='line')
+
+plt.title("Daily Amazon Spending")
+plt.xlabel("Order Date")
+plt.ylabel("Total Charged")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
