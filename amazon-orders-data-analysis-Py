@@ -1,3 +1,7 @@
+#Disclaimer:
+This project was developed and tested using sample/mock Amazon order data for learning and analysis purposes. 
+The code, visualizations, and outputs are structured according to the format of the sample dataset and may require modifications for real-world or production datasets.
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -13,15 +17,15 @@ df['Order Date'] = pd.to_datetime(df['Order Date'], format='mixed')
 df["Order Date"] = df["Order Date"].astype(str).str.replace('00:00:00', '')
 
 # Clean currency columns
-df["Total Charged"] = df["Total Charged"].str.replace('$', '', regex=False).astype(float)
-df["Tax Charged"] = df["Tax Charged"].str.replace('$', '', regex=False).astype(float)
-df["Subtotal"] = df["Subtotal"].str.replace('$', '', regex=False).astype(float)
+df["Total Charged"] = df["Total Charged"].str.replace('$', '').astype(float)
+df["Tax Charged"] = df["Tax Charged"].str.replace('$', '').astype(float)
+df["Subtotal"] = df["Subtotal"].str.replace('$', '').astype(float)
 
 # ---------------- ANALYSIS ----------------
 
 # Total money spent on Amazon
 total_spent = df["Total Charged"].sum()
-print("Total Money Spent on Amazon : $", total_spent)
+print("Total Money Spent on Amazon : $", totalspent)
 
 # Average order value
 average_order = df["Total Charged"].mean()
