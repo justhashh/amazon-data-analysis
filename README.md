@@ -1,5 +1,10 @@
 # How Much Have You Spent on Amazon?
 
+---
+**Disclaimer:**
+This project was developed and tested using sample/mock Amazon order data for learning and analysis purposes. The code, visualizations, and outputs are structured according to the format of the sample dataset and may require modifications for real-world or production datasets.
+---
+
 A Python data analysis project that analyzes Amazon order history and calculates how much money has been spent on Amazon purchases over time.
 
 This project uses Pandas and Matplotlib to clean, process, analyze, and visualize Amazon order data.
