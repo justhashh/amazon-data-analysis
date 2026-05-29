@@ -2,69 +2,71 @@
 This project was developed and tested using sample/mock Amazon order data for learning and analysis purposes. 
 The code, visualizations, and outputs are structured according to the format of the sample dataset and may require modifications for real-world or production datasets.
 
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load Amazon orders dataset
-df = pd.read_csv('amazonorders.csv')
+st.title("Amazon Spending Analysis")
 
-# Fill missing values
-df.fillna({"Purchase Order Number": 0}, inplace=True)
-df.fillna({"Group Name": "Unknown"}, inplace=True)
+amazonorders = st.file_uploader(
+    "Upload a File:",
+    type=["csv"]
+)
 
-# Convert order date column
-df['Order Date'] = pd.to_datetime(df['Order Date'], format='mixed')
-df["Order Date"] = df["Order Date"].astype(str).str.replace('00:00:00', '')
+if amazonorders is not None:
 
-# Clean currency columns
-df["Total Charged"] = df["Total Charged"].str.replace('$', '').astype(float)
-df["Tax Charged"] = df["Tax Charged"].str.replace('$', '').astype(float)
-df["Subtotal"] = df["Subtotal"].str.replace('$', '').astype(float)
+    # Read CSV
+    df = pd.read_csv(amazonorders)
 
-# ---------------- ANALYSIS ----------------
+    st.write(df.head())
 
-# Total money spent on Amazon
-total_spent = df["Total Charged"].sum()
-print("Total Money Spent on Amazon : $", totalspent)
+    # Cleaning
+    df["Total Charged"] = (
+        df["Total Charged"]
+        .str.replace('$', '', regex=False)
+        .astype(float)
+    )
 
-# Average order value
-average_order = df["Total Charged"].mean()
-print("Average Order Value : $", average_order)
+    df["Tax Charged"] = (
+        df["Tax Charged"]
+        .str.replace('$', '', regex=False)
+        .astype(float)
+    )
 
-# Most expensive order
-highest_order = df["Total Charged"].max()
-print("Highest Order Amount : $", highest_order)
+    # Metrics
+    total_spent = df["Total Charged"].sum()
 
-# Least expensive order
-lowest_order = df["Total Charged"].min()
-print("Lowest Order Amount : $", lowest_order)
+    average_order = df["Total Charged"].mean()
 
-# Median order value
-median_order = df["Total Charged"].median()
-print("Median Order Value : $", median_order)
+    total_tax = df["Tax Charged"].sum()
 
-# Total tax paid
-total_tax = df["Tax Charged"].sum()
-print("Total Tax Paid : $", total_tax)
+    st.metric(
+        "Total Money Spent",
+        f"${total_spent:.2f}"
+    )
 
-# Effective tax rate
-tax_rate = (total_tax / total_spent) * 100
-print("Effective Tax Rate :", round(tax_rate, 2), "%")
+    st.metric(
+        "Average Order Value",
+        f"${average_order:.2f}"
+    )
 
-# ---------------- VISUALIZATION ----------------
+    st.metric(
+        "Total Tax Paid",
+        f"${total_tax:.2f}"
+    )
 
-# Daily spending
-daily_orders = df.groupby('Order Date')["Total Charged"].sum()
+    # Graph
+    daily_orders = df.groupby(
+        "Order Date"
+    )["Total Charged"].sum()
 
-plt.figure(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(10, 5))
 
-daily_orders.plot.bar(color='purple')
+    daily_orders.plot(ax=ax)
 
-plt.title("Amazon Spending by Date")
-plt.xlabel("Order Date")
-plt.ylabel("Money Spent ($)")
-plt.xticks(rotation=90)
+    plt.xticks(rotation=45)
 
-plt.tight_layout()
+    st.pyplot(fig)
 
-plt.show()
+else:
+    st.warning("Please upload a CSV file.")
